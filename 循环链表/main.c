@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     CircleList_Insert(list, (CircleListNode*)&v7, CircleList_Length(list));
     CircleList_Insert(list, (CircleListNode*)&v8, CircleList_Length(list));
    
-    for(i=0; i<CircleList_Length(list); i++)
+    for(i=0; i < CircleList_Length(list)*2; i++)
     {
         struct Value* pv = (struct Value*)CircleList_Next(list);
         
@@ -74,9 +74,21 @@ int main(int argc, char *argv[])
     }
     
     printf("\n");
-     
+    
     CircleList_Reset(list);
     
+    /*
+	for(i=0; i < CircleList_Length(list); i++)
+	{
+ 		struct Value* pv = (struct Value*)CircleList_Current(list);
+    	CircleList_Next(list);
+    	printf("0%d ", pv->v);
+    	pv = CircleList_DeleteNode(list, (CircleListNode*)pv);
+    	printf("0%d ", pv->v);
+	}
+	
+	getchar();
+    */
     while( CircleList_Length(list) > 0 )
     {
         struct Value* pv = NULL;
@@ -90,7 +102,17 @@ int main(int argc, char *argv[])
         
         printf("%d\n", pv->v);
         
-        CircleList_DeleteNode(list, (CircleListNode*)pv);
+        pv = CircleList_DeleteNode(list, (CircleListNode*)pv);
+        
+        /*printf("%d\n", pv->v);*/
+        /*
+        for(i=0; i < CircleList_Length(list); i++)
+    	{
+        	struct Value* pv = (struct Value*)CircleList_Get(list, i);
+      	 	printf("%d", pv->v);
+    	}
+
+    	printf("\n");*/
     }
     
     CircleList_Destroy(list);
