@@ -1,47 +1,49 @@
 #include <stdio.h>
 #include <malloc.h>
-#include "CircleList.h"
+#include "DLinkList.h"
 
 typedef struct _tar_circle_list //circle list struct
 {
-	CircleListNode head; 		//list head
-	CircleListNode* slider; 	//list cursor
-	int len; 					//list length
-}TList;
+	DLinkListNode head; 	//list head
+	DLinkListNode* slider; 	//list cursor
+	int len; 		//list length
+}TDLinkList;
 
-CircleList* CircleList_Create()
+DLinkList* DLinkList_Create()
 {
-	TList* list = (TList*)malloc(sizeof(TList));
+	TDLinkList* list = (TDLinkList*)malloc(sizeof(TDLinkList));
 	
 	if(list != NULL)
 	{
 		list->head.next = NULL;
+		list->head.header = NULL;
 		list->slider = NULL;
 		list->len =0;
 	}
 	return list;
 };
 
-void CircleList_Destroy(CircleList* list)
+void DLinkList_Destroy(DLinkList* list)
 {
 	free(list); 
 } 
 
-void CircleList_Clear(CircleList* list)
+void DLinkList_Clear(DLinkList* list)
 {
-	TList* sList = (TList*)list;
+	TDLinkList* sList = (TDLinkList*)list;
 	
 	if(sList != NULL)
 	{
 		sList->head.next = NULL;
+		sList->head.header = NULL;
 		sList->slider = NULL;
 		sList->len =0;
 	}
 }
 
-int CircleList_Length(CircleList* list)
+int DLinkList_Length(DLinkList* list)
 {
-	TList* sList = (TList*)list;
+	TDLinkList* sList = (TDLinkList*)list;
 	
 	int ret = -1;
 	
@@ -53,22 +55,23 @@ int CircleList_Length(CircleList* list)
 	return ret;
 }
 
-int CircleList_Insert(CircleList* list, CircleListNode* node, int pos)
+int DLinkList_Insert(DLinkList* list, DLinkListNode* node, int pos)
 {
-	TList* sList = (TList*)list;
+	TDLinkList* sList = (TDLinkList*)list;
 	int ret = (sList != NULL) && (pos >= 0) && (node != NULL);
 	int i = 0;
 	
 	if(ret)
 	{
-		CircleListNode* current = (CircleListNode*)sList;
-		CircleListNode* current_pos_is_0 = NULL;
+		DLinkListNode* current = (DLinkListNode*)sList;
+		DLinkListNode* current_pos_is_0 = NULL;
+		DLinkListNode* current_node = NULL;
 		
 		for(i =0; (i < pos) && (current->next != NULL); ++i)
 		{
 			current = current->next;
 		} 
-		
+		current_node = current->next;
 		node->next = current->next;
 		current->next = node;
 		
@@ -76,28 +79,37 @@ int CircleList_Insert(CircleList* list, CircleListNode* node, int pos)
 		
 		if(sList->len == 1)
 		{
-			node->next = node;
-			sList->slider = node;
+			node->header = NULL;
+			sList->slider = node;	
 		}
   		else if(pos == 0)
-        {
-			current_pos_is_0 = CircleList_Get(list,(sList->len - 1));
-			current_pos_is_0->next = node;
-		}	
+        	{
+			node->header = NULL;
+
+		}
+		else
+		{
+			node->header = current;
+		}
+		
+		if(current_node != NULL)
+		{
+			current_node->header = node;
+		}		
 	}
 	return ret;
 }
 
-CircleListNode* CircleList_Get(CircleList* list, int pos)
+DLinkListNode* DLinkList_Get(DLinkList* list, int pos)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
-	int ops = (sList != NULL) && (pos >= 0) && (sList->len > 0);
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
+	int ops = (sList != NULL) && (0	<= pos) && (pos < (sList->len)) && (sList->len > 0);
 	int i = 0;
 	
 	if(ops)
 	{
-		CircleListNode* current = (CircleListNode*)sList;
+		DLinkListNode* current = (DLinkListNode*)sList;
 		
 		for(i =0; i < pos; ++i)
 		{
@@ -110,36 +122,51 @@ CircleListNode* CircleList_Get(CircleList* list, int pos)
 	return ret;
 }
 
-CircleListNode* CircleList_Delete(CircleList* list, int pos)
+DLinkListNode* DLinkList_Delete(DLinkList* list, int pos)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
 	int ops = (sList != NULL) && (pos >= 0) && (sList->len > 0);
 	int i = 0;
 	
 	if(ops)
 	{
-		CircleListNode* current = (CircleListNode*)sList;
-		CircleListNode* current_last = (CircleListNode*)CircleList_Get(list,(sList->len - 1));
-		CircleListNode* first = sList->head.next;
+		DLinkListNode* current = (DLinkListNode*)sList;
+		DLinkListNode* first = sList->head.next;
+		DLinkListNode* current_node = NULL;
 		
 		for(i = 0; i < pos; ++i)
 		{
 			current = current->next;
-		} 
-		
+		}
+
 		ret = current->next;
 		current->next = ret->next;
+		current_node = ret->next;
 		
 		if(first == ret)
 		{
 			sList->head.next = ret->next;
-			current_last->next = ret->next;
+			
+			if(current_node != NULL)
+				current_node->header = NULL;
+		}
+		else
+		{
+			if(current_node != NULL)
+				current_node->header = current;
 		}
 		
 		if(sList->slider == ret)
 		{
-			sList->slider = ret->next;
+			if(current_node != NULL)
+			{
+				sList->slider = ret->next;
+			}
+			else
+			{
+				sList->slider = ret->header;
+			}	
 		}
 		
 		sList->len--;
@@ -154,16 +181,16 @@ CircleListNode* CircleList_Delete(CircleList* list, int pos)
 	return ret;
 }
 
-CircleListNode* CircleList_DeleteNode(CircleList* list, CircleListNode* node)
+DLinkListNode* DLinkList_DeleteNode(DLinkList* list, DLinkListNode* node)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
 	int ops = (sList != NULL) && (sList->len > 0);
 	int i = 0;
 	
 	if(ops)
 	{
-		CircleListNode* current = (CircleListNode*)sList;
+		DLinkListNode* current = (DLinkListNode*)sList;
 		
 		for(i =0; (i < (sList->len)) && (current->next != node); ++i)
 		{
@@ -172,7 +199,7 @@ CircleListNode* CircleList_DeleteNode(CircleList* list, CircleListNode* node)
 		
 		if(current->next == node)
 		{
-			ret = CircleList_Delete(list, i);		
+			ret = DLinkList_Delete(list, i);		
 		}
 		
 	}
@@ -180,11 +207,11 @@ CircleListNode* CircleList_DeleteNode(CircleList* list, CircleListNode* node)
 	return ret;
 }
 
-CircleListNode* CircleList_Reset(CircleList* list)
+DLinkListNode* DLinkList_Reset(DLinkList* list)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
-	int ops = (sList != NULL) && (sList->len > 0);
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
+	int ops = (sList != NULL);
 	
 	if(ops)
 	{
@@ -195,10 +222,10 @@ CircleListNode* CircleList_Reset(CircleList* list)
 	return ret;
 }
 
-CircleListNode* CircleList_Current(CircleList* list)
+DLinkListNode* DLinkList_Current(DLinkList* list)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
 	int ops = (sList != NULL) && (sList->len > 0);
 	
 	if(ops)
@@ -209,16 +236,31 @@ CircleListNode* CircleList_Current(CircleList* list)
 	return ret;
 }
 
-CircleListNode* CircleList_Next(CircleList* list)
+DLinkListNode* DLinkList_Next(DLinkList* list)
 {
-	TList* sList = (TList*)list;
-	CircleListNode* ret = NULL;
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
 	int ops = (sList != NULL) && (sList->len > 0) && (sList->slider != NULL);
 	
 	if(ops)
 	{
 		ret = sList->slider;
 		sList->slider = ret->next;
+	}
+	
+	return ret;
+}
+
+DLinkListNode* DLinkList_Per(DLinkList* list)
+{
+	TDLinkList* sList = (TDLinkList*)list;
+	DLinkListNode* ret = NULL;
+	int ops = (sList != NULL) && (sList->len > 0) && (sList->slider != NULL);
+	
+	if(ops)
+	{
+		ret = sList->slider;
+		sList->slider = ret->header;
 	}
 	
 	return ret;

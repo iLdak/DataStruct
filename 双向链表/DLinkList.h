@@ -1,34 +1,37 @@
 #ifndef _DLINKLIST_H_
 #define _DLINKLIST_H_
 
-typedef void CircleList;
-typedef struct CircleListNodeStruct CircleListNode;
-struct CircleListNodeStruct
+typedef void DLinkList;
+typedef struct DLinkListNodeStruct DLinkListNode;
+struct DLinkListNodeStruct
 {
-	CircleListNode *next;
+	DLinkListNode* next;
+	DLinkListNode* header;
 };
 
-CircleList* CircleList_Create();
+DLinkList* DLinkList_Create();
 
-void CircleList_Destroy(CircleList* list);
+void DLinkList_Destroy(DLinkList* list);
 
-void CircleList_Clear(CircleList* list);
+void DLinkList_Clear(DLinkList* list);
 
-int CircleList_Length(CircleList* list);
+int DLinkList_Length(DLinkList* list);
 
-int CircleList_Insert(CircleList* list, CircleListNode* node, int pos);
+int DLinkList_Insert(DLinkList* list, DLinkListNode* node, int pos);
 
-CircleListNode* CircleList_Get(CircleList* list, int pos);
+DLinkListNode* DLinkList_Get(DLinkList* list, int pos);
 
-CircleListNode* CircleList_Delete(CircleList* list, int pos);
+DLinkListNode* DLinkList_Delete(DLinkList* list, int pos);
 
-CircleListNode* CircleList_DeleteNode(CircleList* list, CircleListNode* node);
+DLinkListNode* DLinkList_DeleteNode(DLinkList* list, DLinkListNode* node);
 
-CircleListNode* CircleList_Reset(CircleList* list);
+DLinkListNode* DLinkList_Reset(DLinkList* list);
 
-CircleListNode* CircleList_Current(CircleList* list);
+DLinkListNode* DLinkList_Current(DLinkList* list);
 
-CircleListNode* CircleList_Next(CircleList* list);
+DLinkListNode* DLinkList_Next(DLinkList* list);
+
+DLinkListNode* DLinkList_Per(DLinkList* list);
 
 #endif
 
