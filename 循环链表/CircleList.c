@@ -120,7 +120,7 @@ CircleListNode* CircleList_Delete(CircleList* list, int pos)
 	if(ops)
 	{
 		CircleListNode* current = (CircleListNode*)sList;
-		CircleListNode* current_last = (CircleListNode*)CircleList_Get(list,(sList->len - 1));
+		CircleListNode* current_last = NULL;
 		CircleListNode* first = sList->head.next;
 		
 		for(i = 0; i < pos; ++i)
@@ -128,10 +128,15 @@ CircleListNode* CircleList_Delete(CircleList* list, int pos)
 			current = current->next;
 		} 
 		
+		if(current == (CircleListNode*)sList)
+		{
+			current_last = (CircleListNode*)CircleList_Get(list,(sList->len - 1));	
+		}
+		
 		ret = current->next;
 		current->next = ret->next;
 		
-		if(first == ret)
+		if(current_last != NULL)
 		{
 			sList->head.next = ret->next;
 			current_last->next = ret->next;
