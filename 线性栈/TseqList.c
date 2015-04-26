@@ -5,7 +5,7 @@
 
 typedef unsigned int TseqListNode;
 
-typedef struct _tag_TseqList
+typedef struct
 {
     int catcity;//要创建的列表长度 
     int length;//当前列表的长度位置 
@@ -109,12 +109,11 @@ seqListNode* SeqList_Get(seqList* list, int pos)
 	
 	TseqListNode* ret = NULL;
 	
-	if((sList != NULL) && (0 <= pos) && (pos < (sList->length)))
-	{
+	if((sList != NULL) && (0 <= pos) && (pos < sList->length))
 		ret = (TseqListNode*)sList->node[pos];
-	}
+		
+	return ret;
 	
-	return ret;	
 }
 
 //删除线性表中指定位置的数据元素 
