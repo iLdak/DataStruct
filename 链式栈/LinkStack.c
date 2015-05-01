@@ -71,7 +71,7 @@ void* LinkStack_Pop(LinkStack* stack)
 
 void* LinkStack_Top(LinkStack* stack)
 {
-	TLinkStack* tagNode = (TLinkStack*)LinkList_Delete(stack, 0);
+	TLinkStack* tagNode = (TLinkStack*)LinkList_Get(stack, 0);
 	void* ret = NULL;
 	
 	if(tagNode != NULL)
