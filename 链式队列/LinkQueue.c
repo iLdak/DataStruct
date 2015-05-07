@@ -9,7 +9,7 @@ typedef struct _tag_LinkQueueNode
 	void* item;
 }LinkQueueNode;
 
-LinkQueue* LinkQueue_Create(int capacity)
+LinkQueue* LinkQueue_Create()
 {
 	return LinkList_Create();
 }

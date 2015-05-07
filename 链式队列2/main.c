@@ -12,19 +12,32 @@ int main(int argc, char *argv[])
  	{
 		array[i] = i+1;
 		
-		LinkQueue_Append(queue, (void*)array[i]);
+		LinkQueue_Append(queue, (void*)(array + i));
 	}
 
-	printf("%d\n", (int)LinkQueue_Header(queue));
+	printf("%d\n", *(int*)LinkQueue_Header(queue));
 	
 	printf("%d\n", (int)LinkQueue_Length(queue));
-		
+	
+	printf("\n");	
+	
+	//LinkQueue_Clear(queue);
+	
    	for(i=0; i<10; i++)
  	{
-		array[i] = i+1;
+		int* addr = (int*)LinkQueue_Departure(queue);
 		
-		printf("%d\n", (int)LinkQueue_Departure(queue));
+		if(addr == NULL)
+		{
+			printf("%s\n","error");
+		}
+		else
+		{
+			printf("%d\n", *addr);
+		}
 	}
+	
+	printf("\n");
 	
 	printf("%d\n", (int)LinkQueue_Length(queue));
 
