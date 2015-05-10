@@ -27,7 +27,9 @@ int main(int argc, char *argv[])
 	}
 	
 	printf("%d\n", (int)LinkQueue_Length(queue));
-
+	
+	LinkQueue_Destroy(queue);
+	
   	printf("Press enter to continue ...");
   	getchar();	
   	return 0;

@@ -3,7 +3,7 @@
 
 typedef void LinkQueue;
 
-LinkQueue* LinkQueue_Create(int capacity);
+LinkQueue* LinkQueue_Create();
 
 void LinkQueue_Destroy(LinkQueue* queue);
 
