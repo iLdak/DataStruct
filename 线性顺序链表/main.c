@@ -5,52 +5,52 @@
 int main(int argc, char *argv[]) 
 { 
    seqList* list = SeqList_Create(5); 
-   getchar(); 
+   //getchar(); 
     
    printf("Capacity:%d\n",SeqList_Capacity(list)); 
-   getchar(); 
+   //getchar(); 
     
    printf("Length:%d\n",SeqList_Length(list)); 
-   getchar(); 
+   //getchar(); 
     
    printf("input 1:%d\n",SeqList_Insert(list, "50", 2)); 
-   getchar(); 
+   //getchar(); 
     
    printf("input 2:%d\n",SeqList_Insert(list, "200", 1)); 
-   getchar(); 
+   //getchar(); 
     
    printf("input 3:%d\n",SeqList_Insert(list, "100", 1)); 
-   getchar(); 
+   //getchar(); 
     
    printf("Length:%d\n",SeqList_Length(list)); 
-   getchar(); 
+   //getchar(); 
       
    printf("output 2:%s\n",SeqList_Get(list, 1)); 
-   getchar(); 
+   //getchar(); 
     
    printf("output 1:%s\n",SeqList_Get(list, 0)); 
-   getchar(); 
+   //getchar(); 
     
    printf("output 3:%s\n",SeqList_Get(list, 2)); 
-   getchar(); 
+   //getchar(); 
     
    printf("Delete 2:%s\n",SeqList_Delete(list, 1)); 
-   getchar(); 
+   //getchar(); 
     
    printf("Length:%d\n",SeqList_Length(list)); 
-   getchar(); 
+   //getchar(); 
     
    printf("output 2:%s\n",SeqList_Get(list, 1)); 
-   getchar(); 
+   //getchar(); 
     
    printf("output 1:%s\n",SeqList_Get(list, 0)); 
-   getchar(); 
+   //getchar(); 
     
    SeqList_Clear(list); 
-   getchar(); 
+   //getchar(); 
     
    printf("Length:%d\n",SeqList_Length(list)); 
-   getchar(); 
+   //getchar(); 
     
    SeqList_Destroy(list); 
     
